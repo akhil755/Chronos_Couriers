@@ -81,7 +81,23 @@ public class DispatchCentre {
         assignPackageToRider();
     }
     public String getStatus(String packageId){
+        Package pkg = packages.get(packageId);
         if(!assignments.containsKey(packageId)) return "Package not assigned";
-        return "package assigned to rider: "+assignments.get(packageId);
+        switch (pkg.getStatus()){
+            case PENDING -> {
+                return "package is pending";
+            }
+            case ASSIGNED-> {
+                return "package assigned to rider: " + assignments.get(packageId);
+            }
+            case DELIVERED -> {
+                return "package delivered";
+            }
+            default -> {
+                return "Unknown Status";
+            }
+
+        }
+
     }
 }
