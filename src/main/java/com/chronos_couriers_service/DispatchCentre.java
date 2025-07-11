@@ -22,8 +22,14 @@ public class DispatchCentre {
         riders.put(rider.getId(), rider);
         assignPackageToRider();
     }
-    public void updateRiderStatus(){
+    public void updateRiderStatus(String riderId, Rider.Status status){
+        Rider rider = riders.get(riderId);
+        if(rider == null) throw new IllegalArgumentException("Rider not found");
+        rider.setStatus(status);
 
+        if (status==Rider.Status.AVAILABLE){
+            assignPackageToRider();
+        }
     }
     public void assignPackageToRider(){
         List<Package> assigned = new ArrayList<>();
@@ -59,13 +65,23 @@ public class DispatchCentre {
         assignments.put(pkg.getId(), rider.getId());
 
     }
-    public void processNewPackages(){
 
+    public void deliveryCompletion(String packageId){
+        Package pkg = packages.get(packageId);
+        if(pkg==null) throw new IllegalArgumentException("Package not found");
+
+        pkg.setStatus(Package.Status.DELIVERED);
+        pkg.setDeliveryTime(System.currentTimeMillis());
+
+        String riderId = assignments.get(packageId);
+        if(riderId != null){
+            Rider rider = riders.get(riderId);
+            rider.setStatus(Rider.Status.AVAILABLE);
+        }
+        assignPackageToRider();
     }
-    public void deliveryCompletion(){
-
-    }
-    public void getStatus(){
-
+    public String getStatus(String packageId){
+        if(!assignments.containsKey(packageId)) return "Package not assigned";
+        return "package assigned to rider: "+assignments.get(packageId);
     }
 }
