@@ -41,6 +41,8 @@ public class DispatchCentre {
             if (rider != null){
                 assign(pkg,rider);
                 assigned.add(pkg);
+            }else {
+                noRider(pkg);
             }
         }
 
@@ -65,24 +67,35 @@ public class DispatchCentre {
         assignments.put(pkg.getId(), rider.getId());
 
     }
+    private void noRider(Package pkg){
+        pkg.setStatus(Package.Status.PENDING);
+        assignments.put(pkg.getId(), null);
+    }
 
     public void deliveryCompletion(String packageId){
         Package pkg = packages.get(packageId);
+        String riderId = assignments.get(packageId);
         if(pkg==null) throw new IllegalArgumentException("Package not found");
 
         pkg.setStatus(Package.Status.DELIVERED);
+        packages.remove(packageId);
+        assignments.remove(packageId);
         pkg.setDeliveryTime(System.currentTimeMillis());
 
-        String riderId = assignments.get(packageId);
         if(riderId != null){
             Rider rider = riders.get(riderId);
+            if (packages.isEmpty() & assignments.isEmpty()){
             rider.setStatus(Rider.Status.AVAILABLE);
+            }else {
+                rider.setStatus(Rider.Status.BUSY);
+            }
         }
         assignPackageToRider();
+
     }
     public String getStatus(String packageId){
         Package pkg = packages.get(packageId);
-        if(!assignments.containsKey(packageId)) return "Package not assigned";
+        if(!assignments.containsKey(packageId)) return "Package is not available";
         switch (pkg.getStatus()){
             case PENDING -> {
                 return "package is pending";
@@ -99,5 +112,23 @@ public class DispatchCentre {
 
         }
 
+    }
+    public String getRiderStatus(String riderId){
+        Rider rider = riders.get(riderId);
+        if(!assignments.containsKey(riderId) & rider==null) return "Rider is not available";
+        switch (rider.getStatus()){
+            case AVAILABLE -> {
+                return "Rider available " +(riderId);
+            }
+            case BUSY -> {
+                return "Rider is busy";
+            }
+            case OFFLINE -> {
+                return "Rider is Offline";
+            }
+            default -> {
+                return "unknown status";
+            }
+        }
     }
 }

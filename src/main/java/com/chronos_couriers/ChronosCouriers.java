@@ -61,13 +61,12 @@ public class ChronosCouriers {
                         String riderId = parts[1];
                         Rider.Status status = Rider.Status.valueOf(parts[2].toUpperCase());
                         dispatchCentre.updateRiderStatus(riderId, status);
-
                         System.out.println("Rider status updated : "+status);
                         break;
                     }
-                    case "deliverycompletion":{
+                    case "completedelivery":{
                         if (parts.length<2){
-                            System.out.println("follow : deliverycompletion <packageId>");
+                            System.out.println("follow : completedelivery <packageId>");
                             break;
                         }
                         String packageId = parts[1];
@@ -82,6 +81,15 @@ public class ChronosCouriers {
                         }
                         String packageId = parts[1];
                         System.out.println(dispatchCentre.getStatus(packageId));
+                        break;
+                    }
+                    case "riderstatus":{
+                        if (parts.length<2){
+                            System.out.println("follow : riderStatus <riderId>");
+                            break;
+                        }
+                        String riderId = parts[1];
+                        System.out.println(dispatchCentre.getRiderStatus(riderId));
                         break;
                     }
                     default:
