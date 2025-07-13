@@ -1,5 +1,6 @@
 package com.chronos_couriers_service;
 
+import com.chronos_couriers.audit.AuditLog;
 import com.chronos_couriers_model.Package;
 import com.chronos_couriers_model.Rider;
 import com.chronos_couriers_util.CheckPackagePriority;
@@ -118,7 +119,7 @@ public class DispatchCentre {
         if(!assignments.containsKey(riderId) & rider==null) return "Rider is not available";
         switch (rider.getStatus()){
             case AVAILABLE -> {
-                return "Rider available " +(riderId);
+                return "Rider available " +(riderId)+" " +rider.getReliabilityRating();
             }
             case BUSY -> {
                 return "Rider is busy";
