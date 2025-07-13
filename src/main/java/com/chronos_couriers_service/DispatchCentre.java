@@ -63,7 +63,6 @@ public class DispatchCentre {
     private void assign(Package pkg, Rider rider){
         pkg.setStatus(Package.Status.ASSIGNED);
         pkg.setPickupTime(System.currentTimeMillis());
-
         rider.setStatus(Rider.Status.BUSY);
         assignments.put(pkg.getId(), rider.getId());
 
