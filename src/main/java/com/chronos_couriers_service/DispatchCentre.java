@@ -1,6 +1,6 @@
 package com.chronos_couriers_service;
 
-import com.chronos_couriers.audit.AuditLog;
+
 import com.chronos_couriers_model.Package;
 import com.chronos_couriers_model.Rider;
 import com.chronos_couriers_util.CheckPackagePriority;
