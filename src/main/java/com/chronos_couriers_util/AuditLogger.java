@@ -21,14 +21,12 @@ public class AuditLogger {
         byPackage
                 .computeIfAbsent(logEntry.packageId(), id-> new ArrayList<>())
                 .add(logEntry);
-
-
         if (logEntry.riderId() != null){
             byRider.computeIfAbsent(logEntry.riderId(), id-> new ArrayList<>())
                     .add(logEntry);
         }
-
     }
+
     public List<LogEntry> getPackageHistory(String packageId){
         return  byPackage.getOrDefault(packageId, Collections.emptyList());
     }
@@ -36,6 +34,8 @@ public class AuditLogger {
     public List<LogEntry> getRiderHistory(String riderId){
         return byRider.getOrDefault(riderId, Collections.emptyList());
     }
+
+
     public List<String> getMissedExpressPackages(long expressPackages){
         List<String> missed = new ArrayList<>();
         byPackage.values().forEach(list-> {LogEntry last = list.get(list.size()-1);
@@ -45,4 +45,13 @@ public class AuditLogger {
         });
         return missed;
     }
+
+    public void recordRiderStatus(LogEntry logEntry) {
+            byRider.computeIfAbsent(logEntry.riderId(), id -> new ArrayList<>())
+                    .add(logEntry);
+        }
+
+        public List<LogEntry> getRiderStatusHistory (String riderId){
+            return byRider.getOrDefault(riderId, Collections.emptyList());
+        }
 }

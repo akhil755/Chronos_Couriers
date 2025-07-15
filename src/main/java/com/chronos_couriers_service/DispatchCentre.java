@@ -1,6 +1,5 @@
 package com.chronos_couriers_service;
 
-
 import com.chronos_couriers_model.LogEntry;
 import com.chronos_couriers_model.Package;
 import com.chronos_couriers_model.Rider;
@@ -28,19 +27,51 @@ public class DispatchCentre {
         assignPackageToRider();
 
     }
-    public void registerRider(Rider rider){
+
+    public void registerRider(Rider rider) {
         riders.put(rider.getId(), rider);
         assignPackageToRider();
     }
-    public void updateRiderStatus(String riderId, Rider.Status status){
-        Rider rider = riders.get(riderId);
-        if(rider == null) throw new IllegalArgumentException("Rider not found");
-        rider.setStatus(status);
 
-        if (status==Rider.Status.AVAILABLE){
+    public void updateRiderStatus(String riderId, Rider.Status status) {
+        Rider rider = riders.get(riderId);
+        if (rider == null) throw new IllegalArgumentException("Rider not found");
+
+        String pkgId = findPackageAssignedToRider(riderId);
+        if (pkgId != null) {
+            Package pkg = packages.get(pkgId);
+
+            if (pkg != null && pkg.getStatus() == Package.Status.ASSIGNED) {
+                if (status == Rider.Status.AVAILABLE) {
+                    System.out.println("Rider " + riderId + " can not be set to available while package " + pkgId + " is still assigned");
+                    System.out.println("Updated rider status : "+getRiderStatus(riderId));
+                    return;
+                }
+                if (status == Rider.Status.OFFLINE) {
+                    pkg.setStatus(Package.Status.PENDING);
+                    pkg.setPickupTime(0);
+                    queue.offer(pkg);
+                    assignments.remove(pkgId);
+
+                    audit.record(new LogEntry(pkgId,
+                            riderId,
+                            Package.Status.ASSIGNED,
+                            Package.Status.PENDING,
+                            System.currentTimeMillis()
+                    ));
+                    System.out.println("package " + pkgId + " returned to queue as rider status changed to offline");
+                }
+            }
+        }
+
+        rider.setStatus(status);
+        System.out.println("Rider status updated: " + riderId + " → " + status);
+
+        if(status==Rider.Status.AVAILABLE){
             assignPackageToRider();
         }
     }
+
     public void assignPackageToRider(){
         List<Package> assigned = new ArrayList<>();
         Iterator<Package> iterator =queue.iterator();
@@ -61,10 +92,21 @@ public class DispatchCentre {
         }
 
     }
+    private String findPackageAssignedToRider(String riderId){
+        for (Map.Entry<String, String> entry : assignments.entrySet()){
+            if(riderId.equals(entry.getValue())){
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
     private Rider findRider(Package pkg){
         for (Rider rider : riders.values()){
             if (rider.getStatus() == Rider.Status.AVAILABLE){
-                return rider;
+                if (!pkg.isFragile() || rider.isFragileHandling()) {
+                    return rider;
+                }
             }
         }
         return null;
@@ -86,7 +128,7 @@ public class DispatchCentre {
         assignments.put(pkg.getId(), null);
     }
 
-    public void deliveryCompletion(String packageId){
+    public void completeDelivery(String packageId){
         Package pkg = packages.get(packageId);
         String riderId = assignments.get(packageId);
         if(pkg==null) throw new IllegalArgumentException("Package not found");
@@ -98,33 +140,30 @@ public class DispatchCentre {
                 Package.Status.DELIVERED,
                 System.currentTimeMillis()
         ));
-        packages.remove(packageId);
+        //packages.remove(packageId);
         assignments.remove(packageId);
         pkg.setDeliveryTime(System.currentTimeMillis());
 
         if(riderId != null){
             Rider rider = riders.get(riderId);
-            if (packages.isEmpty() & assignments.isEmpty()){
             rider.setStatus(Rider.Status.AVAILABLE);
-            }else {
-                rider.setStatus(Rider.Status.BUSY);
-            }
         }
         assignPackageToRider();
 
     }
     public String getStatus(String packageId){
         Package pkg = packages.get(packageId);
-        if(!assignments.containsKey(packageId)) return "Package is not available";
+        if(pkg==null) return "Package is not available";
         switch (pkg.getStatus()){
             case PENDING -> {
                 return "package is pending";
             }
             case ASSIGNED-> {
-                return "package assigned to rider: " + assignments.get(packageId);
+                String riderId = assignments.get(packageId);
+                return "package assigned to rider: " + (riderId !=null ? riderId : "unknown");
             }
             case DELIVERED -> {
-                return "package delivered";
+                return "package delivered " + pkg.getDeliveryTime();
             }
             default -> {
                 return "Unknown Status";
@@ -138,13 +177,13 @@ public class DispatchCentre {
         if(!assignments.containsKey(riderId) & rider==null) return "Rider is not available";
         switch (rider.getStatus()){
             case AVAILABLE -> {
-                return "Rider available " +(riderId)+" " +rider.getReliabilityRating();
+                return "Rider "+riderId+ " is available " +(riderId)+" " +rider.getReliabilityRating()+ " "+rider.isFragileHandling();
             }
             case BUSY -> {
-                return "Rider is busy";
+                return "rider "+riderId+ " is busy";
             }
             case OFFLINE -> {
-                return "Rider is Offline";
+                return "Rider "+riderId+" is Offline";
             }
             default -> {
                 return "unknown status";

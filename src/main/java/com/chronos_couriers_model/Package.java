@@ -8,15 +8,17 @@ public class Package {
     private Status status;
     private long pickupTime;
     private long deliveryTime;
+    private final boolean fragile;
 
     public enum Type{EXPRESS, STANDARD}
     public enum Status{PENDING,ASSIGNED,DELIVERED}
 
-    public Package(String id, Type type, long dueDate, long orderedTime){
+    public Package(String id, Type type, long dueDate, long orderedTime, boolean fragile){
         this.id=id;
         this.type=type;
         this.dueDate=dueDate;
         this.orderedTime=orderedTime;
+        this.fragile = fragile;
         this.status=status.PENDING;
     }
 
@@ -58,5 +60,9 @@ public class Package {
 
     public void setDeliveryTime(long deliveryTime) {
         this.deliveryTime = deliveryTime;
+    }
+
+    public boolean isFragile() {
+        return fragile;
     }
 }

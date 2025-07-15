@@ -27,16 +27,18 @@ public class ChronosCouriers {
             try{
                 switch(parts[0].toLowerCase()){
                     case "placeorder":{
-                        if (parts.length<4){
-                            System.out.println("follow: placeOrder <packageId> <EXPRESS|STANDARD> <dueDate>");
+                        if (parts.length<5){
+                            System.out.println("follow: placeOrder <packageId> <EXPRESS|STANDARD> <dueDate> <fragile: true|false>");
                             break;
                         }
                         String pkgId = parts[1];
                         Package.Type type = Package.Type.valueOf(parts[2].toUpperCase());
                         long dueDate = Long.parseLong(parts[3]);
+                        boolean fragile = Boolean.parseBoolean(parts[4]);
                         long orderTime = System.currentTimeMillis();
 
-                        Package pkg = new Package(pkgId, type, dueDate, orderTime);
+
+                        Package pkg = new Package(pkgId, type, dueDate, orderTime, fragile);
                         dispatchCentre.placeOrder(pkg);
                         System.out.println("order placed: "+pkgId);
                         break;
@@ -63,7 +65,7 @@ public class ChronosCouriers {
                         String riderId = parts[1];
                         Rider.Status status = Rider.Status.valueOf(parts[2].toUpperCase());
                         dispatchCentre.updateRiderStatus(riderId, status);
-                        System.out.println("Rider status updated : "+status);
+
                         break;
                     }
                     case "completedelivery":{
@@ -72,7 +74,7 @@ public class ChronosCouriers {
                             break;
                         }
                         String packageId = parts[1];
-                        dispatchCentre.deliveryCompletion(packageId);
+                        dispatchCentre.completeDelivery(packageId);
                         System.out.println("delivery completed :"+packageId);
                         break;
                     }
