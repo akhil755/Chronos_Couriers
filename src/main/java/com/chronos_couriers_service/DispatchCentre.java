@@ -1,8 +1,10 @@
 package com.chronos_couriers_service;
 
 
+import com.chronos_couriers_model.LogEntry;
 import com.chronos_couriers_model.Package;
 import com.chronos_couriers_model.Rider;
+import com.chronos_couriers_util.AuditLogger;
 import com.chronos_couriers_util.CheckPackagePriority;
 
 import java.util.*;
@@ -12,9 +14,16 @@ public class DispatchCentre {
     private final Map<String, Rider> riders = new LinkedHashMap<>();
     private final Map<String, String> assignments = new LinkedHashMap<>();
     private final PriorityQueue<Package> queue = new PriorityQueue<>(new CheckPackagePriority());
+    private static final AuditLogger audit = AuditLogger.getInstance();
 
     public void placeOrder(Package pkg) {
         packages.put(pkg.getId(), pkg);
+        audit.record(new LogEntry(pkg.getId(),
+                null,
+                null,
+                Package.Status.PENDING,
+                System.currentTimeMillis()
+        ));
         queue.offer(pkg);
         assignPackageToRider();
 
@@ -66,6 +75,11 @@ public class DispatchCentre {
         rider.setStatus(Rider.Status.BUSY);
         assignments.put(pkg.getId(), rider.getId());
 
+        audit.record(new LogEntry(pkg.getId(),
+                rider.getId(),
+                Package.Status.PENDING,
+                Package.Status.ASSIGNED,
+                System.currentTimeMillis()));
     }
     private void noRider(Package pkg){
         pkg.setStatus(Package.Status.PENDING);
@@ -78,6 +92,12 @@ public class DispatchCentre {
         if(pkg==null) throw new IllegalArgumentException("Package not found");
 
         pkg.setStatus(Package.Status.DELIVERED);
+        audit.record(new LogEntry(pkg.getId(),
+                riderId,
+                Package.Status.ASSIGNED,
+                Package.Status.DELIVERED,
+                System.currentTimeMillis()
+        ));
         packages.remove(packageId);
         assignments.remove(packageId);
         pkg.setDeliveryTime(System.currentTimeMillis());

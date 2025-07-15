@@ -3,6 +3,7 @@ package com.chronos_couriers;
 import com.chronos_couriers_service.DispatchCentre;
 import com.chronos_couriers_model.Package;
 import com.chronos_couriers_model.Rider;
+import com.chronos_couriers_util.AuditLogger;
 
 
 import java.util.Scanner;
@@ -12,6 +13,7 @@ public class ChronosCouriers {
     public static void main(String... args){
         Scanner scanner = new Scanner(System.in);
         DispatchCentre dispatchCentre = new DispatchCentre();
+        AuditLogger audit = AuditLogger.getInstance();
 
         System.out.println("Chronos Couriers application is started with CLI enabled");
 
@@ -90,6 +92,24 @@ public class ChronosCouriers {
                         }
                         String riderId = parts[1];
                         System.out.println(dispatchCentre.getRiderStatus(riderId));
+                        break;
+                    }
+                    case "packagehistory":{
+                        if (parts.length<2){
+                            System.out.println("follow : packagehistory <packageId>");
+                            break;
+                        }
+                        audit.getPackageHistory(parts[1])
+                                .forEach(System.out::println);
+                        break;
+                    }
+                    case "riderhistory":{
+                        if (parts.length<2){
+                            System.out.println("follow : riderhistory <riderId>");
+                            break;
+                        }
+                        audit.getRiderHistory(parts[1])
+                                .forEach(System.out::println);
                         break;
                     }
                     default:
