@@ -3,6 +3,7 @@ package com.chronos_couriers_service;
 import com.chronos_couriers_model.LogEntry;
 import com.chronos_couriers_model.Package;
 import com.chronos_couriers_model.Rider;
+import com.chronos_couriers_model.RiderLogEntry;
 import com.chronos_couriers_util.AuditLogger;
 import com.chronos_couriers_util.CheckPackagePriority;
 
@@ -30,41 +31,53 @@ public class DispatchCentre {
 
     public void registerRider(Rider rider) {
         riders.put(rider.getId(), rider);
+        audit.recordRiderStatus(new RiderLogEntry(rider.getId(),
+                null,
+                Rider.Status.AVAILABLE,
+                System.currentTimeMillis()));
         assignPackageToRider();
     }
 
     public void updateRiderStatus(String riderId, Rider.Status status) {
         Rider rider = riders.get(riderId);
         if (rider == null) throw new IllegalArgumentException("Rider not found");
+        Rider.Status oldStatus = rider.getStatus();
+        rider.setStatus(status);
 
-        String pkgId = findPackageAssignedToRider(riderId);
-        if (pkgId != null) {
-            Package pkg = packages.get(pkgId);
+        if (oldStatus == Rider.Status.BUSY && status == Rider.Status.OFFLINE) {
+            String pkgId = findPackageAssignedToRider(riderId);
+            if (pkgId != null) {
+                Package pkg = packages.get(pkgId);
 
-            if (pkg != null && pkg.getStatus() == Package.Status.ASSIGNED) {
-                if (status == Rider.Status.AVAILABLE) {
-                    System.out.println("Rider " + riderId + " can not be set to available while package " + pkgId + " is still assigned");
-                    System.out.println("Updated rider status : "+getRiderStatus(riderId));
-                    return;
-                }
-                if (status == Rider.Status.OFFLINE) {
-                    pkg.setStatus(Package.Status.PENDING);
-                    pkg.setPickupTime(0);
-                    queue.offer(pkg);
-                    assignments.remove(pkgId);
+                if (pkg != null && pkg.getStatus() == Package.Status.ASSIGNED) {
+                    if (status == Rider.Status.AVAILABLE) {
+                        System.out.println("Rider " + riderId + " can not be set to available while package " + pkgId + " is still assigned");
+                        System.out.println("Updated rider status : " + getRiderStatus(riderId));
+                        return;
+                    }
+                    if (status == Rider.Status.OFFLINE) {
+                        pkg.setStatus(Package.Status.PENDING);
+                        pkg.setPickupTime(0);
+                        queue.offer(pkg);
+                        assignments.remove(pkgId);
 
-                    audit.record(new LogEntry(pkgId,
-                            riderId,
-                            Package.Status.ASSIGNED,
-                            Package.Status.PENDING,
-                            System.currentTimeMillis()
-                    ));
-                    System.out.println("package " + pkgId + " returned to queue as rider status changed to offline");
+                        audit.record(new LogEntry(pkgId,
+                                riderId,
+                                Package.Status.ASSIGNED,
+                                Package.Status.PENDING,
+                                System.currentTimeMillis()
+                        ));
+                        System.out.println("package " + pkgId + " returned to queue as rider status changed to offline");
+                    }
                 }
             }
         }
 
         rider.setStatus(status);
+        audit.recordRiderStatus(new RiderLogEntry(riderId,
+                oldStatus,
+                status,
+                System.currentTimeMillis()));
         System.out.println("Rider status updated: " + riderId + " → " + status);
 
         if(status==Rider.Status.AVAILABLE){

@@ -4,6 +4,7 @@ package com.chronos_couriers_util;
 
 import com.chronos_couriers_model.LogEntry;
 import com.chronos_couriers_model.Package;
+import com.chronos_couriers_model.RiderLogEntry;
 
 import java.util.*;
 
@@ -16,6 +17,7 @@ public class AuditLogger {
     }
     private final Map<String, List<LogEntry>> byPackage = new HashMap<>();
     private final Map<String, List<LogEntry>> byRider = new HashMap<>();
+    private final Map<String, List<RiderLogEntry>> riderStatusLog = new HashMap<>();
 
     public void record(LogEntry logEntry){
         byPackage
@@ -26,6 +28,11 @@ public class AuditLogger {
                     .add(logEntry);
         }
     }
+    public void recordRiderStatus(RiderLogEntry logEntry) {
+        System.out.println("[DEBUG] Logging Rider status: " + logEntry);
+        riderStatusLog.computeIfAbsent(logEntry.riderId(), id -> new ArrayList<>())
+                .add(logEntry);
+    }
 
     public List<LogEntry> getPackageHistory(String packageId){
         return  byPackage.getOrDefault(packageId, Collections.emptyList());
@@ -34,7 +41,9 @@ public class AuditLogger {
     public List<LogEntry> getRiderHistory(String riderId){
         return byRider.getOrDefault(riderId, Collections.emptyList());
     }
-
+    public List<RiderLogEntry> getRiderStatusHistory (String riderId){
+        return riderStatusLog.getOrDefault(riderId, Collections.emptyList());
+    }
 
     public List<String> getMissedExpressPackages(long expressPackages){
         List<String> missed = new ArrayList<>();
@@ -46,12 +55,7 @@ public class AuditLogger {
         return missed;
     }
 
-    public void recordRiderStatus(LogEntry logEntry) {
-            byRider.computeIfAbsent(logEntry.riderId(), id -> new ArrayList<>())
-                    .add(logEntry);
-        }
 
-        public List<LogEntry> getRiderStatusHistory (String riderId){
-            return byRider.getOrDefault(riderId, Collections.emptyList());
-        }
+
+
 }

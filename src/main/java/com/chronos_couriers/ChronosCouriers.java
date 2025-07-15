@@ -114,6 +114,16 @@ public class ChronosCouriers {
                                 .forEach(System.out::println);
                         break;
                     }
+                    case "riderstatushistory": {
+                        if(parts.length<2){
+                            System.out.println("follow : riderstatushistory <riderId>");
+                            break;
+                        }
+                        String riderId = parts[1];
+                        audit.getRiderStatusHistory(riderId)
+                                .forEach(System.out::println);
+                        break;
+                    }
                     default:
                         System.out.println("unknown command");
 
