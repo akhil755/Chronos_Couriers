@@ -185,6 +185,19 @@ public class DispatchCentre {
         }
 
     }
+
+    public List<String> getMissedExpressDeliveries(){
+        List<String> missed = new ArrayList<>();
+        for(Package pkg : packages.values()){
+            if (pkg.getType() == Package.Type.EXPRESS &&
+                    pkg.getStatus() == Package.Status.DELIVERED &&
+                    pkg.getDeliveryTime()> pkg.getDeadLine()){
+                missed.add(pkg.getId()+ "(Delivered late At " + pkg.getDeliveryTime()+" , deadline was "+pkg.getDeadLine()+ ")");
+            }
+        }
+        return missed;
+    }
+
     public String getRiderStatus(String riderId){
         Rider rider = riders.get(riderId);
         if(!assignments.containsKey(riderId) & rider==null) return "Rider is not available";

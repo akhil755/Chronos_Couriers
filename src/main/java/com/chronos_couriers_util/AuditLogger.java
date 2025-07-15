@@ -29,7 +29,6 @@ public class AuditLogger {
         }
     }
     public void recordRiderStatus(RiderLogEntry logEntry) {
-        System.out.println("[DEBUG] Logging Rider status: " + logEntry);
         riderStatusLog.computeIfAbsent(logEntry.riderId(), id -> new ArrayList<>())
                 .add(logEntry);
     }
@@ -44,18 +43,4 @@ public class AuditLogger {
     public List<RiderLogEntry> getRiderStatusHistory (String riderId){
         return riderStatusLog.getOrDefault(riderId, Collections.emptyList());
     }
-
-    public List<String> getMissedExpressPackages(long expressPackages){
-        List<String> missed = new ArrayList<>();
-        byPackage.values().forEach(list-> {LogEntry last = list.get(list.size()-1);
-        if (last.to() == Package.Status.DELIVERED){
-            long deadLine = list.get(0).timeStamp();
-        }
-        });
-        return missed;
-    }
-
-
-
-
 }

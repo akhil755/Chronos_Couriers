@@ -6,6 +6,7 @@ import com.chronos_couriers_model.Rider;
 import com.chronos_couriers_util.AuditLogger;
 
 
+import java.util.List;
 import java.util.Scanner;
 
 public class ChronosCouriers {
@@ -76,6 +77,15 @@ public class ChronosCouriers {
                         String packageId = parts[1];
                         dispatchCentre.completeDelivery(packageId);
                         System.out.println("delivery completed :"+packageId);
+                        break;
+                    }
+                    case "missedexpress":{
+                        List<String> missed = dispatchCentre.getMissedExpressDeliveries();
+                        if (missed.isEmpty()){
+                            System.out.println("No missed express packages");
+                        }else {
+                            System.out.println("Missed Express Deliveries " +missed);
+                        }
                         break;
                     }
                     case "status":{

@@ -30,7 +30,7 @@ public class Package {
         return type;
     }
 
-    public long getDueDate() {
+    public long getDeadLine() {
         return dueDate;
     }
 
