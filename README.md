@@ -145,32 +145,28 @@ Chronos Couriers application is started with CLI enabled
 
 ### Rider & Package Management
 
-
-registerrider R1 4.5 true
-placeorder P1 EXPRESS 1899999999999 false
-updateriderstatus R1 AVAILABLE
+- registerrider R1 4.5 true
+- placeorder P1 EXPRESS 1899999999999 false
+- updateriderstatus R1 AVAILABLE
 
 
 ### Status & History
 
-
-status P1
-completedelivery P1
-packagehistory P1
-riderhistory R1
-riderstatushistory R1
-riderstatus R1
+- status P1
+- completedelivery P1
+- packagehistory P1
+- riderhistory R1
+- riderstatushistory R1
+- riderstatus R1
 
 
 ### Reports
 
-
-missedexpress
-riderdeliveries R1
+- missedexpress
+- riderdeliveries R1
 
 
 ### Exit
-
 
 exit
 
