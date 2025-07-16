@@ -84,6 +84,18 @@ Queries support last 24h deliveries, missed deadlines
 
 5) Time tracking via System.currentTimeMillis()
 
+# How to Run Tests
+**mvn test** :
+All unit tests will run. Coverage includes:
+
+Package placement and delivery
+
+Rider availability and fragile handling
+
+Missed express delivery reporting
+
+Rider delivery history (last 24h)
+
 # How to Build & Run
 
 **Prerequisites:**
@@ -95,7 +107,9 @@ mvn clean install
 **Run:**
 java -jar target/Chronos_Couriers-1.0-SNAPSHOT.jar
 
-# Sample Test Commands
+you will see "Chronos Couriers application is started with CLI enabled"
+
+# Sample Commands
 
 **1. Register a rider with fragile handling capability :**
 registerrider R1 4.5 true
