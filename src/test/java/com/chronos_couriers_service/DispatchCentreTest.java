@@ -117,7 +117,14 @@ class DispatchCentreTest {
 
     @Test
     void testGetRiderStatusInvalidRider() {
-        assertEquals("Rider is not available", dispatch.getRiderStatus("ghost"));
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> dispatch.getRiderStatus("ghost"));
+        assertTrue(ex.getMessage().contains("Rider not found"));
+    }
+    @Test
+    void testGetRiderStatusThrowsForInvalidId() {
+        DispatchCentre dispatch = new DispatchCentre();
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->{ dispatch.getRiderStatus("ghost123");});
+        assertTrue(ex.getMessage().contains("Rider not found"));
     }
 
 }

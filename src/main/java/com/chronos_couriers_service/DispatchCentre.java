@@ -143,8 +143,11 @@ public class DispatchCentre {
 
     public void completeDelivery(String packageId){
         Package pkg = packages.get(packageId);
+        if(pkg==null) throw new IllegalArgumentException("Package not found "+packageId );
         String riderId = assignments.get(packageId);
-        if(pkg==null) throw new IllegalArgumentException("Package not found");
+        if (riderId == null){
+            throw new IllegalStateException("Package is not assigned to any rider.");
+        }
 
         pkg.setStatus(Package.Status.DELIVERED);
         audit.record(new LogEntry(pkg.getId(),
@@ -153,7 +156,6 @@ public class DispatchCentre {
                 Package.Status.DELIVERED,
                 System.currentTimeMillis()
         ));
-        //packages.remove(packageId);
         assignments.remove(packageId);
         pkg.setDeliveryTime(System.currentTimeMillis());
 
@@ -200,7 +202,9 @@ public class DispatchCentre {
 
     public String getRiderStatus(String riderId){
         Rider rider = riders.get(riderId);
-        if(!assignments.containsKey(riderId) & rider==null) return "Rider is not available";
+        if(rider == null ){
+            throw new IllegalArgumentException("Rider not found: "+riderId);
+        }
         switch (rider.getStatus()){
             case AVAILABLE -> {
                 return "Rider "+riderId+ " is available " +(riderId)+" " +rider.getReliabilityRating()+ " "+rider.isFragileHandling();

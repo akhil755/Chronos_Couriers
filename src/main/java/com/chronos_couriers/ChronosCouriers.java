@@ -102,8 +102,12 @@ public class ChronosCouriers {
                             System.out.println("follow : riderStatus <riderId>");
                             break;
                         }
-                        String riderId = parts[1];
-                        System.out.println(dispatchCentre.getRiderStatus(riderId));
+                        try {
+                            String riderId = parts[1];
+                            System.out.println(dispatchCentre.getRiderStatus(riderId));
+                        }catch (IllegalArgumentException exception){
+                            System.out.println("Error: "+exception.getMessage());
+                        }
                         break;
                     }
                     case "packagehistory":{
