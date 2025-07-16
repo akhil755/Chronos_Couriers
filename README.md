@@ -1,145 +1,152 @@
 # Chronos Couriers Dispatch System
 
-🚀 **Overview**
+## 🚀 Overview
 
 Chronos Couriers is an intelligent, in-memory, single-threaded package dispatching system built using Java. The system simulates real-time rider and package interactions, automating delivery assignments based on package priority, deadlines, rider availability, and fragile handling capabilities.
 
-📦 Features Implemented
+---
 
-# Core Functionalities
+## 📦 Features & Use Cases Implemented
 
-1.Add new delivery orders (EXPRESS or STANDARD)
+### Core Functionalities
 
-2.Rider registration with reliability and fragile handling
+1. Add new delivery orders (**EXPRESS** or **STANDARD**)
+2. Rider registration with reliability and fragile handling
+3. Dynamic package assignment based on:
+   - Priority: **EXPRESS > STANDARD**
+   - Deadline: Sooner first
+   - Order time: Earlier first
+4. Package reassignment when riders go OFFLINE
+5. Fragile package support (assigned only to capable riders)
+6. Package lifecycle tracking: **PENDING → ASSIGNED → DELIVERED**
+7. Audit logs for both package and rider status transitions
+8. Real-time reassignment logic on rider status change
+9. Delivery history query for rider (last 24 hours)
+10. Missed deadline reporting for EXPRESS packages
 
-3.Dynamic package assignment based on:
+---
 
-4.Priority: EXPRESS > STANDARD
+## 🧠 Design Decisions & Architecture
 
-5.Deadline: Sooner first
+### 📁 Clean Package Structure
 
-6.Order time: Earlier first
+- `model` – `Package`, `Rider`, `LogEntry`, `RiderLogEntry`
+- `service` – `DispatchCentre` (core business logic)
+- `util` – `AuditLogger`, `CheckPackagePriority`
 
-7.Package reassignment when riders go OFFLINE
+### 📊 Priority Logic
 
-8.Fragile package support (assigned only to capable riders)
+Implemented using a custom `PriorityQueue` comparator:
 
-9.Package lifecycle tracking: PENDING, ASSIGNED, DELIVERED
+- EXPRESS packages come before STANDARD
+- Earlier deadlines have higher priority
+- Earlier order time acts as a final tiebreaker
 
-10.Audit logs for both package and rider status transitions
+### 🧍 Rider & Package States
 
-11.Real-time reassignment logic on rider status change
+- Rider States: `AVAILABLE`, `BUSY`, `OFFLINE`
+- Package States: `PENDING`, `ASSIGNED`, `DELIVERED`
+- Reassignment happens automatically on rider status change
 
-12.Delivery history query for rider (last 24 hours)
+### 📚 Logging & Auditing
 
-13.Missed deadline reporting for EXPRESS packages
+- All transitions are recorded using `AuditLogger`
+- Separate logs for:
+  - Package status transitions
+  - Rider status transitions
+- Supports queries for:
+  - Missed EXPRESS deliveries
+  - Rider deliveries in last 24 hours
 
-# Design Decisions
+---
 
-**Architecture**
+## 🚧 Constraints Met
 
-**Clean package structure:**
+- ✅ Fully in-memory (no database or file persistence)
+- ✅ Single-threaded (no concurrency code)
+- ✅ Plain Java (no frameworks)
+- ✅ No external APIs or libraries
+- ✅ Time tracking via `System.currentTimeMillis()`
 
-model – Package, Rider, LogEntry, RiderLogEntry classes
+---
 
-service – DispatchCentre (core logic)
+## 🧪 How to Run Tests
 
-util – AuditLogger, priority comparator
+### Run all unit tests:
 
-**Priority Logic**
+```bash
+mvn test
+```
 
-PriorityQueue with custom comparator:
+### Coverage includes:
 
-EXPRESS before STANDARD
+- Package placement and delivery
+- Rider availability and fragile handling
+- Reassignment and delivery flow
+- Missed EXPRESS delivery reporting
+- Rider delivery history (last 24h)
 
-Earlier deadline first
+---
 
-Earlier order time as tiebreaker
+## 🛠 How to Build & Run
 
-Rider & Package States
+### Prerequisites:
 
-Rider states: AVAILABLE, BUSY, OFFLINE
+- Java 17+
+- Maven 3.8+
 
-Package states: PENDING, ASSIGNED, DELIVERED
+### Build the project:
 
-Rider reassignment happens automatically when status changes
-
-**Logging & Audit**
-
-All transitions logged using AuditLogger
-
-Rider log entries and status logs are separated for clarity
-
-Queries support last 24h deliveries, missed deadlines
-
-**Constraints Met**
-
-1) In-memory only (no DB or filesystem)
-
-2) Single-threaded (no concurrency code)
-
-3) No frameworks (plain Java, CLI-based)
-
-4) No external APIs
-
-5) Time tracking via System.currentTimeMillis()
-
-# How to Run Tests
-**mvn test** :
-All unit tests will run. Coverage includes:
-
-Package placement and delivery
-
-Rider availability and fragile handling
-
-Missed express delivery reporting
-
-Rider delivery history (last 24h)
-
-# How to Build & Run
-
-**Prerequisites:**
-Java 17+
-
-**Build:**
+```bash
 mvn clean install
+```
 
-**Run:**
+### Run the application:
+
+```bash
 java -jar target/Chronos_Couriers-1.0-SNAPSHOT.jar
+```
 
-you will see "Chronos Couriers application is started with CLI enabled"
+You will see:
 
-# Sample Commands
+```
+Chronos Couriers application is started with CLI enabled
+```
 
-**1. Register a rider with fragile handling capability :**
+---
+
+## 💻 Sample CLI Commands
+
+### Rider & Package Management
+
+```bash
 registerrider R1 4.5 true
-
-**2. Place an EXPRESS package that is NOT fragile :**
 placeorder P1 EXPRESS 1899999999999 false
-
- **3. Set rider status to AVAILABLE to trigger assignment :**
 updateriderstatus R1 AVAILABLE
+```
 
-**4. Check the package status :**
+### Status & History
+
+```bash
 status P1
-
-**5. Complete the delivery :**
 completedelivery P1
-
-**6. View the full package transition history :**
 packagehistory P1
-
-**7. View all delivery events performed by the rider :**
 riderhistory R1
-
-**8. View rider's availability transitions :**
 riderstatushistory R1
-
-**9. Check if the delivery missed its deadline :**
-missedexpress
-
-**10. View rider's deliveries in the last 24 hours :**
-riderdeliveries R1
-
-**11. Check the current rider status :**
 riderstatus R1
+```
+
+### Reports
+
+```bash
+missedexpress
+riderdeliveries R1
+```
+
+### Exit
+
+```bash
+exit
+```
+
+
