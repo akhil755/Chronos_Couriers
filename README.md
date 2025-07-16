@@ -100,7 +100,7 @@ Implemented using a custom `PriorityQueue` comparator:
 
 ### Run all unit tests:
 
-```bash
+```
 mvn test
 ```
 
@@ -114,7 +114,7 @@ mvn test
 
 ---
 
-## 🛠 How to Build & Run
+## How to Build & Run
 
 ### Prerequisites:
 
@@ -145,7 +145,7 @@ Chronos Couriers application is started with CLI enabled
 
 ### Rider & Package Management
 
-```bash
+```
 registerrider R1 4.5 true
 placeorder P1 EXPRESS 1899999999999 false
 updateriderstatus R1 AVAILABLE
@@ -153,7 +153,7 @@ updateriderstatus R1 AVAILABLE
 
 ### Status & History
 
-```bash
+```
 status P1
 completedelivery P1
 packagehistory P1
@@ -164,14 +164,14 @@ riderstatus R1
 
 ### Reports
 
-```bash
+```
 missedexpress
 riderdeliveries R1
 ```
 
 ### Exit
 
-```bash
+```
 exit
 ```
 
