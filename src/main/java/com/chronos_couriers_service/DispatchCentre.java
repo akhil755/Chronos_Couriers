@@ -216,4 +216,18 @@ public class DispatchCentre {
             }
         }
     }
+    public List<String> getDeliveriesByRiderInLast24Hours(String riderId){
+        long now = System.currentTimeMillis();
+        long cutoff = now - 86400000L;
+        List<String> recentDeliveries = new ArrayList<>();
+        List<LogEntry> logs = AuditLogger.getInstance().getRiderHistory(riderId);
+        for (LogEntry logEntry : logs){
+            if (logEntry.from() == Package.Status.ASSIGNED &&
+            logEntry.to() == Package.Status.DELIVERED &&
+            logEntry.timeStamp() >= cutoff){
+                recentDeliveries.add(logEntry.packageId() +" at " + logEntry.timeStamp());
+            }
+        }
+        return recentDeliveries;
+    }
 }

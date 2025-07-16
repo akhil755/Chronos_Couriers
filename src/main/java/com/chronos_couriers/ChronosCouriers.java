@@ -134,6 +134,20 @@ public class ChronosCouriers {
                                 .forEach(System.out::println);
                         break;
                     }
+                    case "riderdeliveries":{
+                        if (parts.length<2){
+                            System.out.println("follow : riderdeliveries <riderId>");
+                            break;
+                        }
+                        String riderId = parts[1];
+                        List<String> recent = dispatchCentre.getDeliveriesByRiderInLast24Hours(riderId);
+                        if (recent.isEmpty()){
+                            System.out.println("No deliveries found for "+riderId+ " in last 24 hours");
+                        }else {
+                            System.out.println("Deliveries by "+riderId+" in last 24 hours "+recent);
+                        }
+                        break;
+                    }
                     default:
                         System.out.println("unknown command");
 
