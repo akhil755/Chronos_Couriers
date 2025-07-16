@@ -48,6 +48,25 @@ Implemented using a custom `PriorityQueue` comparator:
 - Package States: `PENDING`, `ASSIGNED`, `DELIVERED`
 - Reassignment happens automatically on rider status change
 
+### 🧍Rider Assignment Logic
+   **A Rider must be:**
+
+- AVAILABLE 
+
+- Able to handle fragile items if the package is fragile
+
+- First matching eligible rider is assigned
+
+### 🧍Rider Status Transitions
+-Riders can transition between AVAILABLE, BUSY, and OFFLINE
+- If a rider goes OFFLINE while delivering, the package is:
+- - Returned to queue
+- - Logged in the audit system
+
+### 📊Fragile Handling
+- Fragile packages can only be assigned to riders with fragileHandling = true
+- If no such rider is available, package stays in PENDING
+
 ### 📚 Logging & Auditing
 
 - All transitions are recorded using `AuditLogger`
@@ -57,6 +76,13 @@ Implemented using a custom `PriorityQueue` comparator:
 - Supports queries for:
   - Missed EXPRESS deliveries
   - Rider deliveries in last 24 hours
+
+### Missed Deadline Reporting
+- EXPRESS packages are tracked for deadline violations
+- If deliveryTime > deadline, the package is listed as “missed delivery”
+
+### 24-Hour Rider Delivery History
+- Based on audit logs, all deliveries completed by a rider in the last 24 hours are retrievable using timestamps
 
 ---
 
