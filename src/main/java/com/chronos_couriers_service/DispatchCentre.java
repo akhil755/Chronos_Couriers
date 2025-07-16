@@ -168,7 +168,9 @@ public class DispatchCentre {
     }
     public String getStatus(String packageId){
         Package pkg = packages.get(packageId);
-        if(pkg==null) return "Package is not available";
+        if(pkg==null) {
+            throw new IllegalArgumentException("package not found: "+packageId);
+        }
         switch (pkg.getStatus()){
             case PENDING -> {
                 return "package is pending";

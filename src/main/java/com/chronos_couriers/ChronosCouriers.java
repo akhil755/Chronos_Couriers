@@ -1,5 +1,6 @@
 package com.chronos_couriers;
 
+import com.chronos_couriers_model.LogEntry;
 import com.chronos_couriers_service.DispatchCentre;
 import com.chronos_couriers_model.Package;
 import com.chronos_couriers_model.Rider;
@@ -93,8 +94,12 @@ public class ChronosCouriers {
                             System.out.println("follow : status <packageId>");
                             break;
                         }
-                        String packageId = parts[1];
-                        System.out.println(dispatchCentre.getStatus(packageId));
+                        try {
+                            String packageId = parts[1];
+                            System.out.println(dispatchCentre.getStatus(packageId));
+                        }catch (IllegalArgumentException exception){
+                            System.out.println("Error : "+exception.getMessage());
+                        }
                         break;
                     }
                     case "riderstatus":{
@@ -115,8 +120,16 @@ public class ChronosCouriers {
                             System.out.println("follow : packagehistory <packageId>");
                             break;
                         }
-                        audit.getPackageHistory(parts[1])
-                                .forEach(System.out::println);
+                        try{
+                            List<LogEntry> history = audit.getPackageHistory(parts[1]);
+                            if (history.isEmpty()) {
+                                System.out.println("No history found for package: " + parts[1]);
+                            }else {
+                            history.forEach(System.out::println);
+                            }
+                        }catch (Exception exception){
+                            System.out.println("Error: "+exception.getMessage());
+                        }
                         break;
                     }
                     case "riderhistory":{
