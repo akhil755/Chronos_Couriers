@@ -4,7 +4,7 @@
 
 Chronos Couriers is an intelligent, in-memory, single-threaded package dispatching system built using Java. The system simulates real-time rider and package interactions, automating delivery assignments based on package priority, deadlines, rider availability, and fragile handling capabilities.
 
----
+
 
 ## Features & Use Cases Implemented
 
@@ -24,7 +24,7 @@ Chronos Couriers is an intelligent, in-memory, single-threaded package dispatchi
 9. Delivery history query for rider (last 24 hours)
 10. Missed deadline reporting for EXPRESS packages
 
----
+
 
 ## Design Decisions & Architecture
 
@@ -84,7 +84,7 @@ Implemented using a custom `PriorityQueue` comparator:
 ### 24-Hour Rider Delivery History
 - Based on audit logs, all deliveries completed by a rider in the last 24 hours are retrievable using timestamps
 
----
+
 
 ## Constraints Met
 
@@ -94,15 +94,15 @@ Implemented using a custom `PriorityQueue` comparator:
 - No external APIs or libraries
 - Time tracking via `System.currentTimeMillis()`
 
----
+
 
 ## How to Run Tests
 
 ### Run all unit tests:
 
-```
+
 mvn test
-```
+
 
 ### Coverage includes:
 
@@ -112,7 +112,7 @@ mvn test
 - Missed EXPRESS delivery reporting
 - Rider delivery history (last 24h)
 
----
+
 
 ## How to Build & Run
 
@@ -123,56 +123,56 @@ mvn test
 
 ### Build the project:
 
-```bash
+
 mvn clean install
-```
+
 
 ### Run the application:
 
-```bash
+
 java -jar target/Chronos_Couriers-1.0-SNAPSHOT.jar
-```
+
 
 You will see:
 
-```
-Chronos Couriers application is started with CLI enabled
-```
 
----
+Chronos Couriers application is started with CLI enabled
+
+
+
 
 ## Sample CLI Commands
 
 ### Rider & Package Management
 
-```
+
 registerrider R1 4.5 true
 placeorder P1 EXPRESS 1899999999999 false
 updateriderstatus R1 AVAILABLE
-```
+
 
 ### Status & History
 
-```
+
 status P1
 completedelivery P1
 packagehistory P1
 riderhistory R1
 riderstatushistory R1
 riderstatus R1
-```
+
 
 ### Reports
 
-```
+
 missedexpress
 riderdeliveries R1
-```
+
 
 ### Exit
 
-```
+
 exit
-```
+
 
 
