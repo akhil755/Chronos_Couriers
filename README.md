@@ -1,12 +1,12 @@
 # Chronos Couriers Dispatch System
 
-## 🚀 Overview
+## Overview
 
 Chronos Couriers is an intelligent, in-memory, single-threaded package dispatching system built using Java. The system simulates real-time rider and package interactions, automating delivery assignments based on package priority, deadlines, rider availability, and fragile handling capabilities.
 
 ---
 
-## 📦 Features & Use Cases Implemented
+## Features & Use Cases Implemented
 
 ### Core Functionalities
 
@@ -26,15 +26,15 @@ Chronos Couriers is an intelligent, in-memory, single-threaded package dispatchi
 
 ---
 
-## 🧠 Design Decisions & Architecture
+## Design Decisions & Architecture
 
-### 📁 Clean Package Structure
+### Clean Package Structure
 
 - `model` – `Package`, `Rider`, `LogEntry`, `RiderLogEntry`
 - `service` – `DispatchCentre` (core business logic)
 - `util` – `AuditLogger`, `CheckPackagePriority`
 
-### 📊 Priority Logic
+### Priority Logic
 
 Implemented using a custom `PriorityQueue` comparator:
 
@@ -42,13 +42,13 @@ Implemented using a custom `PriorityQueue` comparator:
 - Earlier deadlines have higher priority
 - Earlier order time acts as a final tiebreaker
 
-### 🧍 Rider & Package States
+### Rider & Package States
 
 - Rider States: `AVAILABLE`, `BUSY`, `OFFLINE`
 - Package States: `PENDING`, `ASSIGNED`, `DELIVERED`
 - Reassignment happens automatically on rider status change
 
-### 🧍Rider Assignment Logic
+### Rider Assignment Logic
    **A Rider must be:**
 
 - AVAILABLE 
@@ -57,17 +57,17 @@ Implemented using a custom `PriorityQueue` comparator:
 
 - First matching eligible rider is assigned
 
-### 🧍Rider Status Transitions
+### Rider Status Transitions
 -Riders can transition between AVAILABLE, BUSY, and OFFLINE
 - If a rider goes OFFLINE while delivering, the package is:
 - - Returned to queue
 - - Logged in the audit system
 
-### 📊Fragile Handling
+### Fragile Handling
 - Fragile packages can only be assigned to riders with fragileHandling = true
 - If no such rider is available, package stays in PENDING
 
-### 📚 Logging & Auditing
+### Logging & Auditing
 
 - All transitions are recorded using `AuditLogger`
 - Separate logs for:
@@ -86,17 +86,17 @@ Implemented using a custom `PriorityQueue` comparator:
 
 ---
 
-## 🚧 Constraints Met
+## Constraints Met
 
-- ✅ Fully in-memory (no database or file persistence)
-- ✅ Single-threaded (no concurrency code)
-- ✅ Plain Java (no frameworks)
-- ✅ No external APIs or libraries
-- ✅ Time tracking via `System.currentTimeMillis()`
+- Fully in-memory (no database or file persistence)
+- Single-threaded (no concurrency code)
+- Plain Java (no frameworks)
+- No external APIs or libraries
+- Time tracking via `System.currentTimeMillis()`
 
 ---
 
-## 🧪 How to Run Tests
+## How to Run Tests
 
 ### Run all unit tests:
 
@@ -141,7 +141,7 @@ Chronos Couriers application is started with CLI enabled
 
 ---
 
-## 💻 Sample CLI Commands
+## Sample CLI Commands
 
 ### Rider & Package Management
 
