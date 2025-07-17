@@ -29,7 +29,7 @@ public class ChronosCouriers {
             try{
                 switch(parts[0].toLowerCase()){
                     case "placeorder":{
-                        if (parts.length<5){
+                        if (parts.length!=5){
                             System.out.println("follow: placeOrder <packageId> <EXPRESS|STANDARD> <dueDate> <fragile: true|false>");
                             break;
                         }
@@ -46,7 +46,7 @@ public class ChronosCouriers {
                         break;
                     }
                     case"registerrider":{
-                        if (parts.length<4){
+                        if (parts.length!=4){
                             System.out.println("follow: registerRider <riderId><rating><fragileHandling:true|false>");
                             break;
                         }
@@ -60,7 +60,7 @@ public class ChronosCouriers {
                         break;
                     }
                     case "updateriderstatus":{
-                        if (parts.length<3){
+                        if (parts.length!=3){
                             System.out.println("follow : updateRiderStatus <riderId><AVAILABLE|BUSY|OFFLINE>");
                             break;
                         }
@@ -71,7 +71,7 @@ public class ChronosCouriers {
                         break;
                     }
                     case "completedelivery":{
-                        if (parts.length<2){
+                        if (parts.length!=2){
                             System.out.println("follow : completedelivery <packageId>");
                             break;
                         }
@@ -90,7 +90,7 @@ public class ChronosCouriers {
                         break;
                     }
                     case "status":{
-                        if (parts.length<2){
+                        if (parts.length!=2){
                             System.out.println("follow : status <packageId>");
                             break;
                         }
@@ -103,7 +103,7 @@ public class ChronosCouriers {
                         break;
                     }
                     case "riderstatus":{
-                        if (parts.length<2){
+                        if (parts.length!=2){
                             System.out.println("follow : riderStatus <riderId>");
                             break;
                         }
@@ -116,7 +116,7 @@ public class ChronosCouriers {
                         break;
                     }
                     case "packagehistory":{
-                        if (parts.length<2){
+                        if (parts.length!=2){
                             System.out.println("follow : packagehistory <packageId>");
                             break;
                         }
@@ -133,7 +133,7 @@ public class ChronosCouriers {
                         break;
                     }
                     case "riderhistory":{
-                        if (parts.length<2){
+                        if (parts.length!=2){
                             System.out.println("follow : riderhistory <riderId>");
                             break;
                         }
@@ -142,7 +142,7 @@ public class ChronosCouriers {
                         break;
                     }
                     case "riderstatushistory": {
-                        if(parts.length<2){
+                        if(parts.length!=2){
                             System.out.println("follow : riderstatushistory <riderId>");
                             break;
                         }
@@ -152,7 +152,7 @@ public class ChronosCouriers {
                         break;
                     }
                     case "riderdeliveries":{
-                        if (parts.length<2){
+                        if (parts.length!= 2){
                             System.out.println("follow : riderdeliveries <riderId>");
                             break;
                         }
