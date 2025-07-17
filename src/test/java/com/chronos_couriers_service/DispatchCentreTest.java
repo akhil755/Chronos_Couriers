@@ -112,13 +112,16 @@ class DispatchCentreTest {
     }
     @Test
     void testGetStatusInvalidPackage() {
-        assertEquals("Package is not available", dispatch.getStatus("nonexistent"));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            dispatch.getStatus("non existent");
+        });
+        assertTrue(exception.getMessage().toLowerCase().contains("package not found"));
     }
 
     @Test
     void testGetRiderStatusInvalidRider() {
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> dispatch.getRiderStatus("ghost"));
-        assertTrue(ex.getMessage().contains("Rider not found"));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> dispatch.getRiderStatus("non existent"));
+        assertTrue(exception.getMessage().contains("Rider not found"));
     }
     @Test
     void testGetRiderStatusThrowsForInvalidId() {

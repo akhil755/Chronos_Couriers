@@ -43,4 +43,9 @@ public class AuditLogger {
     public List<RiderLogEntry> getRiderStatusHistory (String riderId){
         return riderStatusLog.getOrDefault(riderId, Collections.emptyList());
     }
+    public void reset() {
+        byPackage.clear();
+        byRider.clear();
+        riderStatusLog.clear();
+    }
 }
