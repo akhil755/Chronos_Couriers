@@ -1,7 +1,7 @@
-package com.chronos_couriers_util;
+package com.chronoscouriers.util;
 
-import com.chronos_couriers_model.LogEntry;
-import com.chronos_couriers_model.Package;
+import com.chronoscouriers.model.LogEntry;
+import com.chronoscouriers.model.Package;
 import org.junit.jupiter.api.Test;
 
 

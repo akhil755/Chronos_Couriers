@@ -1,7 +1,7 @@
-package com.chronos_couriers_service;
+package com.chronoscouriers.service;
 
-import com.chronos_couriers_model.Package;
-import com.chronos_couriers_model.Rider;
+import com.chronoscouriers.model.Package;
+import com.chronoscouriers.model.Rider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

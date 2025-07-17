@@ -32,7 +32,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.chronos_couriers.ChronosCouriers</mainClass>
+                            <mainClass>com.chronoscouriers.ChronosCouriers</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

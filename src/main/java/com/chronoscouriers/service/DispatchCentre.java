@@ -1,11 +1,11 @@
-package com.chronos_couriers_service;
+package com.chronoscouriers.service;
 
-import com.chronos_couriers_model.LogEntry;
-import com.chronos_couriers_model.Package;
-import com.chronos_couriers_model.Rider;
-import com.chronos_couriers_model.RiderLogEntry;
-import com.chronos_couriers_util.AuditLogger;
-import com.chronos_couriers_util.CheckPackagePriority;
+import com.chronoscouriers.model.LogEntry;
+import com.chronoscouriers.model.Package;
+import com.chronoscouriers.model.Rider;
+import com.chronoscouriers.model.RiderLogEntry;
+import com.chronoscouriers.util.AuditLogger;
+import com.chronoscouriers.util.CheckPackagePriority;
 
 import java.util.*;
 

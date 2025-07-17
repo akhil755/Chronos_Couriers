@@ -1,4 +1,4 @@
-package com.chronos_couriers_model;
+package com.chronoscouriers.model;
 
 public class Package {
     private final String id;

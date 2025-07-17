@@ -1,4 +1,4 @@
-package com.chronos_couriers_model;
+package com.chronoscouriers.model;
 
 public record RiderLogEntry(String riderId,
                             Rider.Status from,

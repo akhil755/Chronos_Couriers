@@ -1,7 +1,7 @@
-package com.chronos_couriers_util;
+package com.chronoscouriers.util;
 
 import java.util.Comparator;
-import com.chronos_couriers_model.Package;
+import com.chronoscouriers.model.Package;
 
 public class CheckPackagePriority implements Comparator<Package> {
 

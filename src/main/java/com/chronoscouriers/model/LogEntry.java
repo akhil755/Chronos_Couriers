@@ -1,4 +1,4 @@
-package com.chronos_couriers_model;
+package com.chronoscouriers.model;
 
 public record LogEntry
     (String packageId,

@@ -1,10 +1,9 @@
-package com.chronos_couriers_util;
+package com.chronoscouriers.util;
 
 
 
-import com.chronos_couriers_model.LogEntry;
-import com.chronos_couriers_model.Package;
-import com.chronos_couriers_model.RiderLogEntry;
+import com.chronoscouriers.model.LogEntry;
+import com.chronoscouriers.model.RiderLogEntry;
 
 import java.util.*;
 
