@@ -38,7 +38,7 @@ public class AuditLogger {
     }
 
     public List<LogEntry> getRiderHistory(String riderId){
-        return byRider.getOrDefault(riderId, Collections.emptyList());
+            return byRider.getOrDefault(riderId, Collections.emptyList());
     }
     public List<RiderLogEntry> getRiderStatusHistory (String riderId){
         return riderStatusLog.getOrDefault(riderId, Collections.emptyList());

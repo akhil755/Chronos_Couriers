@@ -130,6 +130,7 @@ public class DispatchCentre {
         rider.setStatus(Rider.Status.BUSY);
         assignments.put(pkg.getId(), rider.getId());
 
+
         audit.record(new LogEntry(pkg.getId(),
                 rider.getId(),
                 Package.Status.PENDING,
@@ -138,7 +139,6 @@ public class DispatchCentre {
     }
     private void noRider(Package pkg){
         pkg.setStatus(Package.Status.PENDING);
-        assignments.put(pkg.getId(), null);
     }
 
     public void completeDelivery(String packageId){
